@@ -173,5 +173,102 @@ describe('app routes', () => {
 
       expect(data.body).toEqual(expectation);
     });
+
+    test('updates a fruit', async() => {
+
+      const newFruit = {
+        'name': 'Lychee',
+        'flavor': 'Lychee tastes like a grape, but with a stronger, slightly acidic touch. Some people also swear that it tastes more like a pear or a watermelon. It\'s a balance of sweet and tart.',
+        'color': 'red or pink skin, and is covered with small wrinkled protuberances, resembling the strawberry tree fruit. The pulp is white, firm and somewhat hard, carrying a seed inside.',
+        'price': '12',
+        'grown_in': 'Taiwan, China and Thailand',
+        'looks_weird': true,
+        'category': 'floral',
+      };
+      
+      const expectedFruit = {
+        ...newFruit,
+        owner_id: 1,
+        id: 6
+      };
+
+      await fakeRequest(app)
+        .put('/fruits/6')
+        .send(newFruit)
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      const updateFruit = await fakeRequest(app)
+        .get('/fruits/6')
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      expect(updateFruit.body).toEqual(expectedFruit);
+    });
+
+    test('deletes a single fruit dependent of the id', async() => {
+
+      const expectation = {
+        'id': 3,
+        'name': 'Starfruit',
+        'flavor': 'Star fruit tastes tart and sweet. It’s best described as a cross between a pear, apple, plum, with a hint of citrus added. Unripe star fruits are more on the sour, citrus side while very ripe ones resemble plums and pineapple.',
+        'color': 'yellow to green skin- with pale yellow flesh',
+        'price': '7',
+        'grown_in': 'Malaysia, Philippines and India',
+        'looks_weird': true,
+        'category': 'tart',
+        'owner_id': 1
+      };
+
+      const data = await fakeRequest(app)
+        .delete('/fruits/3')
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      expect(data.body).toEqual(expectation);
+      
+      const deleted = await fakeRequest(app)
+        .get('/fruits/3')
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      expect(deleted.body).toEqual('');
+    });
+    
+    test('creates a new fruit and the new fruit is in our fruits list', async() => {
+
+      const newFruit = {
+        'name': 'orange',
+        'flavor': 'tastes citrusy-- like an orange',
+        'color': 'orange',
+        'price': '1',
+        'grown_in': 'florida',
+        'looks_weird': false,
+        'category': 'tart',
+      };
+      
+      const expectedFruit = {
+        ...newFruit,
+        owner_id: 1,
+        id: 7
+      };
+
+      const data = await fakeRequest(app)
+        .post('/fruits')
+        .send(newFruit)
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      expect(data.body).toEqual(expectedFruit);
+
+      const allFruits = await fakeRequest(app)
+        .get('/fruits')
+        .expect('Content-Type', /json/)
+        .expect(200);
+      
+      const orange = allFruits.body.find(fruit => fruit.name === 'orange');
+
+      expect(orange).toEqual(expectedFruit);
+    });
   });
 });
