@@ -2,6 +2,7 @@ require('dotenv').config();
 
 const { execSync } = require('child_process');
 
+
 const fakeRequest = require('supertest');
 const app = require('../lib/app');
 const client = require('../lib/client');
@@ -32,35 +33,25 @@ describe('app routes', () => {
     });
 
 
-    test('returns fruit dependent of the category', async() => {
+    test('returns all categories', async() => {
 
       const expectation = [
         {
           'id': 1,
-          'name': 'Kiwi',
-          'flavor': 'Kiwis are sweet, refreshing fruits with a nice tartness that complements their sweetness. The riper the fruit is, the sweeter and less tart it tends to be.',
-          'color': 'brown skin with green flesh.',
-          'price': '3',
-          'grown_in': 'China, Italy and New Zealand',
-          'looks_weird': false,
-          'category': 'sweet',
-          'owner_id': 1
+          'name_type': 'tart'
         },
         {
           'id': 2,
-          'name': 'Mango',
-          'flavor': 'Besides tasting sweet, they have a range of tastes from floral to citrusy depending on the mango. Some have a tropical flower flavor and aroma while others are almost orangy and fairly tart like lemon.',
-          'color': 'green, orange and red skin- with saffron colored flesh.',
-          'price': '5',
-          'grown_in': 'India, China and Thailand',
-          'looks_weird': false,
-          'category': 'sweet',
-          'owner_id': 1
+          'name_type': 'sweet'
+        },
+        {
+          'id': 3,
+          'name_type': 'floral'
         }
       ];
 
       const data = await fakeRequest(app)
-        .get('/fruits/categories/sweet')
+        .get('/categories')
         .expect('Content-Type', /json/)
         .expect(200);
 
@@ -80,6 +71,7 @@ describe('app routes', () => {
           'price': '7',
           'grown_in': 'Malaysia, Philippines and India',
           'looks_weird': true,
+          'category_id': 1,
           'category': 'tart',
           'owner_id': 1
         };
@@ -99,15 +91,16 @@ describe('app routes', () => {
 
       const expectation = [
         {
-          'id': 1,
-          'name': 'Kiwi',
-          'flavor': 'Kiwis are sweet, refreshing fruits with a nice tartness that complements their sweetness. The riper the fruit is, the sweeter and less tart it tends to be.',
-          'color': 'brown skin with green flesh.',
-          'price': '3',
-          'grown_in': 'China, Italy and New Zealand',
-          'looks_weird': false,
-          'category': 'sweet',
-          'owner_id': 1
+          'id': 3,
+          'name': 'Starfruit',
+          'flavor': 'Star fruit tastes tart and sweet. It’s best described as a cross between a pear, apple, plum, with a hint of citrus added. Unripe star fruits are more on the sour, citrus side while very ripe ones resemble plums and pineapple.',
+          'color': 'yellow to green skin- with pale yellow flesh',
+          'price': '7',
+          'grown_in': 'Malaysia, Philippines and India',
+          'looks_weird': true,
+          'category_id': 1,
+          'owner_id': 1,
+          'category': 'tart'
         },
         {
           'id': 2,
@@ -117,41 +110,21 @@ describe('app routes', () => {
           'price': '5',
           'grown_in': 'India, China and Thailand',
           'looks_weird': false,
-          'category': 'sweet',
-          'owner_id': 1
+          'category_id': 2,
+          'owner_id': 1,
+          'category': 'sweet'
         },
         {
-          'id': 3,
-          'name': 'Starfruit',
-          'flavor': 'Star fruit tastes tart and sweet. It’s best described as a cross between a pear, apple, plum, with a hint of citrus added. Unripe star fruits are more on the sour, citrus side while very ripe ones resemble plums and pineapple.',
-          'color': 'yellow to green skin- with pale yellow flesh',
-          'price': '7',
-          'grown_in': 'Malaysia, Philippines and India',
-          'looks_weird': true,
-          'category': 'tart',
-          'owner_id': 1
-        },
-        {
-          'id': 4,
-          'name': 'Passion Fruit',
-          'flavor': 'Passion fruit have a fragrantly sweet taste with a pleasantly tart tang and are very juicy. What to akin it to? I don’t know. Let’s see. Maybe kiwi. Maybe pineapple.',
-          'color': 'purple to yellow kin- with golden flesh and dark seeds.',
-          'price': '8',
-          'grown_in': 'Malaysia, United States and Kenya',
+          'id': 1,
+          'name': 'Kiwi',
+          'flavor': 'Kiwis are sweet, refreshing fruits with a nice tartness that complements their sweetness. The riper the fruit is, the sweeter and less tart it tends to be.',
+          'color': 'brown skin with green flesh.',
+          'price': '3',
+          'grown_in': 'China, Italy and New Zealand',
           'looks_weird': false,
-          'category': 'floral',
-          'owner_id': 1
-        },
-        {
-          'id': 5,
-          'name': 'Guava',
-          'flavor': 'The general taste of guava is said to be a cross between strawberries and pears, but depending on the variety, the sweet flavor will vary between mild and strong',
-          'color': 'green, yellow, pink to red skin- with yellow, pink to red flesh',
-          'price': '8.5',
-          'grown_in': 'India, China and Thailand',
-          'looks_weird': false,
-          'category': 'floral',
-          'owner_id': 1
+          'category_id': 2,
+          'owner_id': 1,
+          'category': 'sweet'
         },
         {
           'id': 6,
@@ -161,8 +134,33 @@ describe('app routes', () => {
           'price': '6',
           'grown_in': 'Taiwan, China and Thailand',
           'looks_weird': true,
-          'category': 'floral',
-          'owner_id': 1
+          'category_id': 3,
+          'owner_id': 1,
+          'category': 'floral'
+        },
+        {
+          'id': 5,
+          'name': 'Guava',
+          'flavor': 'The general taste of guava is said to be a cross between strawberries and pears, but depending on the variety, the sweet flavor will vary between mild and strong',
+          'color': 'green, yellow, pink to red skin- with yellow, pink to red flesh',
+          'price': '8.5',
+          'grown_in': 'India, China and Thailand',
+          'looks_weird': false,
+          'category_id': 3,
+          'owner_id': 1,
+          'category': 'floral'
+        },
+        {
+          'id': 4,
+          'name': 'Passion Fruit',
+          'flavor': 'Passion fruit have a fragrantly sweet taste with a pleasantly tart tang and are very juicy. What to akin it to? I don’t know. Let’s see. Maybe kiwi. Maybe pineapple.',
+          'color': 'purple to yellow kin- with golden flesh and dark seeds.',
+          'price': '8',
+          'grown_in': 'Malaysia, United States and Kenya',
+          'looks_weird': false,
+          'category_id': 3,
+          'owner_id': 1,
+          'category': 'floral'
         }
       ];
 
@@ -177,13 +175,15 @@ describe('app routes', () => {
     test('updates a fruit', async() => {
 
       const newFruit = {
+
         'name': 'Lychee',
         'flavor': 'Lychee tastes like a grape, but with a stronger, slightly acidic touch. Some people also swear that it tastes more like a pear or a watermelon. It\'s a balance of sweet and tart.',
         'color': 'red or pink skin, and is covered with small wrinkled protuberances, resembling the strawberry tree fruit. The pulp is white, firm and somewhat hard, carrying a seed inside.',
-        'price': '12',
+        'price': '6',
         'grown_in': 'Taiwan, China and Thailand',
         'looks_weird': true,
-        'category': 'floral',
+        'category_id': 3,
+        'category': 'floral'
       };
       
       const expectedFruit = {
@@ -216,8 +216,9 @@ describe('app routes', () => {
         'price': '7',
         'grown_in': 'Malaysia, Philippines and India',
         'looks_weird': true,
-        'category': 'tart',
-        'owner_id': 1
+        'category_id': 1,
+        'owner_id': 1,
+        
       };
 
       const data = await fakeRequest(app)
@@ -244,7 +245,8 @@ describe('app routes', () => {
         'price': '1',
         'grown_in': 'florida',
         'looks_weird': false,
-        'category': 'tart',
+        'category_id': 1,
+      
       };
       
       const expectedFruit = {
@@ -268,7 +270,13 @@ describe('app routes', () => {
       
       const orange = allFruits.body.find(fruit => fruit.name === 'orange');
 
-      expect(orange).toEqual(expectedFruit);
+      expect(orange).toEqual({ ...expectedFruit, category: 'tart' });
     });
+
+
+
+
+    
+
   });
 });

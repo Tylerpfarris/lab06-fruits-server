@@ -9,14 +9,18 @@ async function run() {
   try {
     // initiate connecting to db
     await client.connect();
-
+    console.log('pre qu');
     // run a query to create tables
     await client.query(`
                 CREATE TABLE users (
-                    id SERIAL PRIMARY KEY,
+                    id SERIAL PRIMARY KEY NOT NULL,
                     email VARCHAR(256) NOT NULL,
                     hash VARCHAR(512) NOT NULL
-                );           
+                ); 
+                CREATE TABLE categories (
+                  id SERIAL PRIMARY KEY NOT NULL,
+                  name_type VARCHAR(512) NOT NULL 
+            );          
                 CREATE TABLE fruits (
                     id SERIAL PRIMARY KEY NOT NULL,
                     name VARCHAR(512) NOT NULL,
@@ -25,11 +29,12 @@ async function run() {
                     price DECIMAL NOT NULL,
                     grown_in VARCHAR(512) NOT NULL,
                     looks_weird BOOLEAN NOT NULL,
-                    category VARCHAR(512) NOT NULL,
+                    category_id INTEGER NOT NULL REFERENCES categories(id),
                     owner_id INTEGER NOT NULL REFERENCES users(id)
             );
+           
         `);
-
+    console.log('post');
     console.log('create tables complete', getEmoji(), getEmoji(), getEmoji());
   }
   catch(err) {
