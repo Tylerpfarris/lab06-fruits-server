@@ -6,7 +6,7 @@ module.exports = [
     price: 3.00,
     grown_in: 'China, Italy and New Zealand',
     looks_weird: false,
-    category: 'sweet',   
+    category_id: 2,   
   },
   {
     name: 'Mango',
@@ -15,7 +15,7 @@ module.exports = [
     price: 5.00,
     grown_in: 'India, China and Thailand',
     looks_weird: false,
-    category: 'sweet',
+    category_id: 2,
 
   },
   {
@@ -25,7 +25,7 @@ module.exports = [
     price: 7.00,
     grown_in: 'Malaysia, Philippines and India',
     looks_weird: true,
-    category: 'tart',
+    category_id: 1,
     
    
   },
@@ -36,7 +36,7 @@ module.exports = [
     price: 8.00,
     grown_in: 'Malaysia, United States and Kenya',
     looks_weird: false,
-    category: 'floral'
+    category_id: 3
    
   },
   {
@@ -46,7 +46,7 @@ module.exports = [
     price: 8.50,
     grown_in: 'India, China and Thailand',
     looks_weird: false,
-    category: 'floral'
+    category_id: 3
    
   },
   {
@@ -56,7 +56,7 @@ module.exports = [
     price: 6.00,
     grown_in: 'Taiwan, China and Thailand',
     looks_weird: true,
-    category: 'floral'
+    category_id: 3
    
   },
 ];
